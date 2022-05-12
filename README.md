@@ -9,3 +9,6 @@
 ````
 python group_evals.py "D:\folder\gradebook"
 ````
+
+# TODO
+- open to suggestions

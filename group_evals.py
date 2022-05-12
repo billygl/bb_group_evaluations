@@ -27,19 +27,27 @@ for root, subdirs, files in os.walk(folderpath):
             os.mkdir(folder)
         os.rename(filepath, os.path.join(folder, filename))
 
-#rename folders
+#rename folders, files
 renaming_folders = []
 for root, subdirs, files in os.walk(folderpath):
     student = None
-    for filename in files:        
+    f = 0
+    for filename in files:
+        f = f + 1
         filepath = os.path.join(root, filename)
-        m = re.search('\_\d{8}\_intento\_[\d\-]{19}\.txt', filename)
+        m = re.search('(\_\d{8}\_intento\_[\d\-]{19})(.*)(\.txt)?', filename)
         if m:
-            with open (filepath, 'rt', encoding="utf8") as file:
-                line = file.readline()
-                m = re.search('Nombre: ([\w ]*)', line)
-                if m:
-                    student = m.group(1)    
+            suffix = m.group(2)
+            if suffix == '.txt':
+                with open (filepath, 'rt', encoding="utf8") as file:
+                    line = file.readline()
+                    mn = re.search('Nombre: ([\w ]*)', line)
+                    if mn:
+                        student = mn.group(1).lower()
+                new_name = str(f) + '_intento.txt'
+            else:
+                new_name = str(f) + suffix
+            os.rename(filepath, os.path.join(root, new_name))
     if student is not None:
         SEPARATOR = ' '
         if student not in root:
